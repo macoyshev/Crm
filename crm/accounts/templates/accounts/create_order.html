@@ -1,0 +1,17 @@
+<!-- 
+	csrf_token некий протокол безопасности
+	здесь мы используем form который мы отправляем из view -> перейди туда для дальнейшего ознакомления  
+-->
+
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<form action="" method="POST">
+	{%csrf_token%}
+	{{form}}
+	<br>
+	<input type="submit" name="submit" value="Подтвердить">
+</form>
+
+{% endblock %}
