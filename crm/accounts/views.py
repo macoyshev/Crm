@@ -11,20 +11,22 @@ from .forms import OrderForm
 
 
 # function called by link - 'port/'
+
 def home(request):
 	orders = Order.objects.all()
 	customers = Customer.objects.all()
 	total_orders = orders.count()
 	delivered = orders.filter(status="Dilevered").count()
 	pending = orders.filter(status="Pending").count()
-	return render(request, 'accounts/dashboard.html',{
+
+	context = {
 			'orders': orders,
 			'customers': customers,
 			'total_orders': total_orders,
 			'delivered': delivered,
-			'pending': pending
-		})
-
+			'pending': pending,
+		}
+	return render(request, 'accounts/dashboard.html',context)
 
 def products(request):
 	products = Product.objects.all()
