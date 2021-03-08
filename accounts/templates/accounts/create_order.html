@@ -1,0 +1,20 @@
+<!-- 
+	csrf_token некий протокол безопасности
+	здесь мы используем form который мы отправляем из view -> перейди туда для дальнейшего ознакомления  
+-->
+
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6">
+	<div class="card card-body">
+	<form action="" method="POST">
+		{%csrf_token%}
+		{{form}}
+		<input type="submit" name="submit" value="Подтвердить">
+	</form>
+</div>
+</div>
+</div>
+{% endblock %}
