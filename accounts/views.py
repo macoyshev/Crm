@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import OrderForm
-
+from django.forms.models import inlineformset_factory
 
 
 '''django проходит по каждому приложению , и если видет папку templates, то кидает их в помещает их templates всего приложения
@@ -58,15 +58,17 @@ def customer(request, pk_test):
 	и перессылаем в HOme 
 """
 
-def create_order(request):
-	form = OrderForm()
+def create_order(request, pk):
+	OrderFormSet = inlineformset_factory(Customer, Order, fields = ('product', 'status'))
+	customer = Customer.objects.get(id=pk)
+	formset = OrderFormSet(queryset=Order.objects.none(),instance=customer)
 	if request.method == 'POST':
-		form = OrderForm(request.POST)
-		if form.is_valid():
-			form.save()
+		formset = OrderForm(request.POST, instance=customer)
+		if formset.is_valid():
+			formset.save()
 			return redirect('/')
 	context = {
-		'form': form
+		'formset': formset
 	}
 	return render(request, 'accounts/create_order.html', context)
 

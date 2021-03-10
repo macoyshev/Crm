@@ -11,7 +11,10 @@
 	<div class="card card-body">
 	<form action="" method="POST">
 		{%csrf_token%}
-		{{form}}
+		{{form.management_set}}
+		{% for form in formset %}
+			{{form}}<hr>
+		{% endfor %}
 		<input type="submit" name="submit" value="Подтвердить">
 	</form>
 </div>
