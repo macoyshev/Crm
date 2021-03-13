@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import *
 from .forms import OrderForm
 from django.forms.models import inlineformset_factory
+from .filters import OrderFilter
 
 
 '''django проходит по каждому приложению , и если видет папку templates, то кидает их в помещает их templates всего приложения
@@ -39,10 +40,15 @@ def customer(request, pk_test):
 	customer = Customer.objects.get(id=pk_test)
 	orders = customer.order_set.all()
 	total_orders = orders.count()
+
+	myFilter = OrderFilter(request.GET, queryset=Order.objects.all())
+	orders = myFilter.qs
+
 	context = {
 		'customer': customer,
 		'orders': orders,
 		'total_orders': total_orders,
+		'myFilter': myFilter,
 	}
 	return render(request, 'accounts/customer.html', context)
 
