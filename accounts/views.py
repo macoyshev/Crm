@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
-from .forms import OrderForm
+from .forms import OrderForm, RegisterForm
 from django.forms.models import inlineformset_factory
 from .filters import OrderFilter
 
@@ -108,3 +108,19 @@ def delete_order(request, pk):
 		'item': order,
 	}
 	return render(request, 'accounts/delete_order.html', context)
+
+
+def register(request):
+	form = RegisterForm()
+	if request.method == 'POST':
+		form = RegisterForm(request.POST)
+		if form.is_valid():
+			form.save()
+	context = {
+		'form': form,
+	}
+	return render(request, 'accounts/register.html', context)
+
+
+def login(request):
+	return render(request, 'accounts/login.html')
