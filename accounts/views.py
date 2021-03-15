@@ -1,13 +1,17 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+
 from .models import *
+
 from .forms import *
+
 from django.forms.models import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
 from .filters import OrderFilter
+
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 
 '''django проходит по каждому приложению , и если видет папку templates, то кидает их в помещает их templates всего приложения
 и render вызывает первый совпавший шаблон , поэтому внутри папки templates принято создавать папку приложения, чтобы вызывать 
@@ -22,7 +26,6 @@ def home(request):
 	total_orders = orders.count()
 	delivered = orders.filter(status="Dilevered").count()
 	pending = orders.filter(status="Pending").count()
-
 	context = {
 			'orders': orders,
 			'customers': customers,
@@ -32,22 +35,23 @@ def home(request):
 		}
 	return render(request, 'accounts/dashboard.html',context)
 
+
 @login_required(login_url='login')
 def products(request):
 	products = Product.objects.all()
-	return render(request, 'accounts/products.html',{
+	context = {
 			'products': products,
-		})
+		}
+	return render(request, 'accounts/products.html', context)
+
 
 @login_required(login_url='login')
 def customer(request, pk_test):
 	customer = Customer.objects.get(id=pk_test)
 	orders = customer.order_set.all()
 	total_orders = orders.count()
-
 	myFilter = OrderFilter(request.GET, queryset=Order.objects.all())
 	orders = myFilter.qs
-
 	context = {
 		'customer': customer,
 		'orders': orders,
@@ -102,13 +106,13 @@ def update_order(request, pk):
 	}
 	return render(request, 'accounts/create_order.html', context)
 
+
 @login_required(login_url='login')
 def delete_order(request, pk):
 	order = Order.objects.get(id=pk)
 	if request.method == 'POST':
 		order.delete()
 		return redirect('/')
-
 	context = {
 		'item': order,
 	}
@@ -124,13 +128,16 @@ def register(request):
 			user = form.cleaned_data.get('username')
 			messages.success(request, 'Account was created' + user)
 			return redirect('login')
-
 	context = {
 		'form': form,
 	}
 	return render(request, 'accounts/register.html', context)
 
 
+"""
+	Login создает сессию, где хранит id обьекта для дальнейшего использования
+	Authenticate проверяют базу данных на наличие пользователя и возращает обьект в случае успеха
+"""
 def loginPage(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
@@ -143,7 +150,7 @@ def loginPage(request):
 			messages.info(request,'Uncorrect login or password')
 	return render(request, 'accounts/login.html')
 
-
+""""""
 def logOutUser(request):
 	logout(request)
 	return redirect('login')
