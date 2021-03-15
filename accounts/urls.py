@@ -12,5 +12,5 @@ urlpatterns = [
 	path('delete_order/<str:pk>/', views.delete_order, name="delete_order"),
 
 	path('login', views.login, name='login'),
-	path('register', views.register, name='reginster'),
+	path('register', views.register, name='register'),
 ]

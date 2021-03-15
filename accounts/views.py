@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
-from .forms import OrderForm, RegisterForm
+from .forms import *
 from django.forms.models import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm
 from .filters import OrderFilter
+from django.contrib import messages
 
 
 '''django проходит по каждому приложению , и если видет папку templates, то кидает их в помещает их templates всего приложения
@@ -111,16 +113,17 @@ def delete_order(request, pk):
 
 
 def register(request):
-	form = RegisterForm()
+	form = CreateRegisterForm()
 	if request.method == 'POST':
-		form = RegisterForm(request.POST)
+		form = CreateRegisterForm(request.POST)
 		if form.is_valid():
 			form.save()
+			redirect('login')
+
 	context = {
 		'form': form,
 	}
 	return render(request, 'accounts/register.html', context)
-
 
 def login(request):
 	return render(request, 'accounts/login.html')
