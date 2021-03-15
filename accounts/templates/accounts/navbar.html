@@ -1,5 +1,28 @@
 {% load static %}
 
+<style>
+  .great-message{
+    color:white;
+    font-size: 18px;
+    padding-right: 20px;
+  }
+  .logout{
+    text-decoration: none;
+    color:white;
+    padding:6px;
+    font-size: 18px;
+    margin-right: 10px;
+    border: 1px solid white;
+    border-radius: 20px;
+  }
+
+  .logout:hover{
+    background: blue;
+    color:white;
+    border-color:blue;
+  }
+</style>
+
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
@@ -18,5 +41,9 @@
       </ul>
     </div>
   </div>
+
+  <span class='great-message'>Hello,{{request.user}} </span>
+  <span><a class ="logout" href="{% url 'logout' %}"> Logout</a></span>
+
 </nav>
 
