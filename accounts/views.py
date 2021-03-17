@@ -5,7 +5,7 @@ from .models import *
 
 from .forms import *
 
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_users
 
 from django.forms.models import inlineformset_factory
 from .filters import OrderFilter
@@ -22,6 +22,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 # function called by link - 'port/'
 @login_required(login_url='login')
+@allowed_users(allowed_roles='admin')
 def home(request):
 	orders = Order.objects.all()
 	customers = Customer.objects.all()
@@ -36,6 +37,10 @@ def home(request):
 			'pending': pending,
 		}
 	return render(request, 'accounts/dashboard.html',context)
+
+
+def userPage(request):
+	return render(request, 'accounts/userPage.html')
 
 
 @login_required(login_url='login')
