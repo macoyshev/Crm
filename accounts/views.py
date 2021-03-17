@@ -5,6 +5,8 @@ from .models import *
 
 from .forms import *
 
+from .decorators import unauthenticated_user
+
 from django.forms.models import inlineformset_factory
 from .filters import OrderFilter
 
@@ -119,6 +121,7 @@ def delete_order(request, pk):
 	return render(request, 'accounts/delete_order.html', context)
 
 
+@unauthenticated_user
 def register(request):
 	form = CreateRegisterForm()
 	if request.method == 'POST':
@@ -138,6 +141,7 @@ def register(request):
 	Login создает сессию, где хранит id обьекта для дальнейшего использования
 	Authenticate проверяют базу данных на наличие пользователя и возращает обьект в случае успеха
 """
+@unauthenticated_user
 def loginPage(request):
 	if request.method == 'POST':
 		username = request.POST.get('username')
