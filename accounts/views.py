@@ -5,7 +5,7 @@ from .models import *
 
 from .forms import *
 
-from .decorators import unauthenticated_user, allowed_users
+from .decorators import unauthenticated_user, allowed_users, admin_only
 
 from django.forms.models import inlineformset_factory
 from .filters import OrderFilter
@@ -13,6 +13,7 @@ from .filters import OrderFilter
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.contrib.auth.forms import UserCreationForm
 
 '''django проходит по каждому приложению , и если видет папку templates, то кидает их в помещает их templates всего приложения
@@ -22,7 +23,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 # function called by link - 'port/'
 @login_required(login_url='login')
-@allowed_users(allowed_roles='admin')
+@admin_only
 def home(request):
 	orders = Order.objects.all()
 	customers = Customer.objects.all()
@@ -53,6 +54,7 @@ def products(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles='admin')
 def customer(request, pk_test):
 	customer = Customer.objects.get(id=pk_test)
 	orders = customer.order_set.all()
@@ -79,6 +81,7 @@ def customer(request, pk_test):
 	и перессылаем в HOme 
 """
 @login_required(login_url='login')
+@allowed_users(allowed_roles='admin')
 def create_order(request, pk):
 	OrderFormSet = inlineformset_factory(Customer, Order, fields = ('product', 'status'))
 	customer = Customer.objects.get(id=pk)
@@ -100,6 +103,7 @@ def create_order(request, pk):
 	
 """
 @login_required(login_url='login')
+@allowed_users(allowed_roles='admin')
 def update_order(request, pk):
 	order = Order.objects.get(id=pk)
 	form = OrderForm(instance=order)
@@ -115,6 +119,7 @@ def update_order(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_roles='admin')
 def delete_order(request, pk):
 	order = Order.objects.get(id=pk)
 	if request.method == 'POST':
@@ -132,9 +137,11 @@ def register(request):
 	if request.method == 'POST':
 		form = CreateRegisterForm(request.POST)
 		if form.is_valid():
-			form.save()
-			user = form.cleaned_data.get('username')
-			messages.success(request, 'Account was created' + user)
+			user = form.save()
+			username = form.cleaned_data.get('username')
+			group = Group.objects.get(name='customer')
+			user.groups.add(group)
+			messages.success(request, 'Account was created' + username)
 			return redirect('login')
 	context = {
 		'form': form,
