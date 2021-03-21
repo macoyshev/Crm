@@ -189,3 +189,7 @@ def loginPage(request):
 def logOutUser(request):
 	logout(request)
 	return redirect('login')
+
+
+def profileSettings(request):
+	return render(request, 'accounts/profileSettings.html')

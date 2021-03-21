@@ -1,0 +1,19 @@
+{% extends 'accounts/main.html' %}
+
+{% block content %}
+
+<div class="row ">
+	<div class="col-4 mx-auto">
+		<div class="card card-body">
+			<div class="card-title">Avatar</div>
+			<img src="{{request.user.customer.profile_pic.url}}">
+		</div>
+	</div>
+	<div class="col-4 mx-auto">
+		<div class="card card-body">
+			
+		</div>
+	</div>
+</div>
+
+{% endblock %}

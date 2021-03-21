@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.conf import settings 
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -7,6 +9,7 @@ urlpatterns = [
 	path('products/', views.products, name="products"),
 	path('customer/<str:pk_test>/', views.customer, name="customer"),
 	path('userPage', views.userPage, name="userPage"),
+	path('profileSettings', views.profileSettings, name='profileSettings'),
 
 	path('create_order/<str:pk>/', views.create_order, name="create_order"),
 	path('update_order/<str:pk>/', views.update_order, name="update_order"),
@@ -16,3 +19,5 @@ urlpatterns = [
 	path('register', views.register, name='register'),
 	path('logout', views.logOutUser, name='logout')
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
