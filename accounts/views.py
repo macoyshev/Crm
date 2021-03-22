@@ -192,4 +192,14 @@ def logOutUser(request):
 
 
 def profileSettings(request):
-	return render(request, 'accounts/profileSettings.html')
+	user = request.user.customer
+	form = CustomerForm(instance=user)
+	if request.method == 'POST':
+		form = CustomerForm(request.POST, request.FILES, instance=user)
+		if form.is_valid():
+			form.save();
+			return redirect('userPage')
+	context = {
+		'form':form,
+	}
+	return render(request, 'accounts/profileSettings.html',context)

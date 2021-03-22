@@ -2,16 +2,27 @@
 
 {% block content %}
 
+<style>
+	.user-pic{
+		max-width: 200px;
+		max-width: 200px;
+	}
+</style>
+
 <div class="row ">
 	<div class="col-4 mx-auto">
 		<div class="card card-body">
 			<div class="card-title">Avatar</div>
-			<img src="{{request.user.customer.profile_pic.url}}">
+			<img class="user-pic" src="{{request.user.customer.profile_pic.url}}">
 		</div>
 	</div>
 	<div class="col-4 mx-auto">
 		<div class="card card-body">
-			
+			<form action="" method="POST" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{form.as_p}}
+				<input type="submit" value=submit>
+			</form>
 		</div>
 	</div>
 </div>
