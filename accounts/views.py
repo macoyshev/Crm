@@ -203,3 +203,7 @@ def profileSettings(request):
 		'form':form,
 	}
 	return render(request, 'accounts/profileSettings.html',context)
+
+
+def contactPage(request):
+	return render(request, 'accounts/contactPage.html')
