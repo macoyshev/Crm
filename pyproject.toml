@@ -8,6 +8,7 @@ authors = ["macoyshev <make.oynoshev@gmail.com>"]
 python = "^3.9"
 Django = "^4.0.3"
 django-filter = "^21.1"
+Pillow = "^9.0.1"
 
 [tool.poetry.dev-dependencies]
 
